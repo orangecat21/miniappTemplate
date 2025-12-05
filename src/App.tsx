@@ -68,7 +68,7 @@ export default function App() {
   }, []);
 
   const navItems = [
-    { icon: Home, label: 'Home' },
+    { icon: Home, label: 'Zalupa' },
     { icon: ShoppingBag, label: 'Shop' },
     { icon: User, label: 'Profile' }
   ];
