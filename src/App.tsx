@@ -125,13 +125,7 @@ function Navigation() {
 }
 
 function AppContent() {
-  const { theme, isDark, telegramUser } = useTheme();
-  const [isDarkMode, setIsDarkMode] = useState(isDark);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    // In a real app, you'd update the theme preference here
-  };
+  const { theme, isDark, telegramUser, toggleDarkMode } = useTheme();
 
   return (
     <div className={`min-h-screen ${theme.bg} transition-all duration-700 flex flex-col p-4`}>
@@ -140,7 +134,7 @@ function AppContent() {
           onClick={toggleDarkMode}
           className="bg-white/10 backdrop-blur-md rounded-full p-2 shadow-lg hover:scale-110 transition-transform"
         >
-          {isDarkMode ? (
+          {isDark ? (
             <Sun className="w-5 h-5 text-yellow-300" strokeWidth={2} />
           ) : (
             <Moon className="w-5 h-5 text-purple-600" strokeWidth={2} />

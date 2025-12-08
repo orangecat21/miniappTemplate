@@ -43,11 +43,23 @@ export function useTheme() {
             setIsDark(WebApp.colorScheme === 'dark');
           });
         } else {
-          setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+          // Check for system preference and also localStorage for persisted theme
+          const savedTheme = localStorage.getItem('theme');
+          if (savedTheme) {
+            setIsDark(savedTheme === 'dark');
+          } else {
+            setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+          }
         }
       } catch (error) {
         console.error('Telegram WebApp init error:', error);
-        setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+        // Fallback to system preference and localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+          setIsDark(savedTheme === 'dark');
+        } else {
+          setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+        }
       }
     };
 
@@ -65,6 +77,15 @@ export function useTheme() {
     };
   }, []);
 
+  const toggleDarkMode = () => {
+    setIsDark(prevIsDark => {
+      const newIsDark = !prevIsDark;
+      // Save to localStorage for persistence
+      localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
+      return newIsDark;
+    });
+  };
+
   const theme = {
     bg: isDark
       ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900'
@@ -75,5 +96,5 @@ export function useTheme() {
     borderColor: isDark ? 'border-gray-700' : 'border-gray-200',
   };
 
-  return { theme, isDark, telegramUser };
+  return { theme, isDark, telegramUser, toggleDarkMode };
 }
