@@ -1,41 +1,15 @@
 import { useState, useEffect } from 'react';
+import { ThemeMode } from '../types';
 
-declare global {
-  interface Window {
-    Telegram?: {
-      WebApp: any;
-    };
-  }
-}
-
-export function useTheme() {
-  const [isDark, setIsDark] = useState(false);
-  const [telegramUser, setTelegramUser] = useState<{
-    firstName: string;
-    lastName?: string;
-    username?: string;
-    photoUrl?: string;
-  } | null>(null);
+export const useTheme = () => {
+  const [isDark, setIsDark] = useState<boolean>(false);
 
   useEffect(() => {
-    const initTelegram = async () => {
+    const initTheme = () => {
       try {
         const WebApp = window.Telegram?.WebApp;
 
         if (WebApp) {
-          WebApp.ready();
-          WebApp.expand();
-
-          const user = WebApp.initDataUnsafe?.user;
-          if (user) {
-            setTelegramUser({
-              firstName: user.first_name,
-              lastName: user.last_name,
-              username: user.username,
-              photoUrl: user.photo_url,
-            });
-          }
-
           const colorScheme = WebApp.colorScheme;
           setIsDark(colorScheme === 'dark');
 
@@ -43,27 +17,15 @@ export function useTheme() {
             setIsDark(WebApp.colorScheme === 'dark');
           });
         } else {
-          // Check for system preference and also localStorage for persisted theme
-          const savedTheme = localStorage.getItem('theme');
-          if (savedTheme) {
-            setIsDark(savedTheme === 'dark');
-          } else {
-            setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
-          }
-        }
-      } catch (error) {
-        console.error('Telegram WebApp init error:', error);
-        // Fallback to system preference and localStorage
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-          setIsDark(savedTheme === 'dark');
-        } else {
           setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
         }
+      } catch (error) {
+        console.error('Theme initialization error:', error);
+        setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
       }
     };
 
-    initTelegram();
+    initTheme();
 
     return () => {
       try {
@@ -72,29 +34,20 @@ export function useTheme() {
           WebApp.offEvent('themeChanged', () => {});
         }
       } catch (error) {
-        console.error('Error cleaning up Telegram events:', error);
+        console.error('Error cleaning up theme events:', error);
       }
     };
   }, []);
 
-  const toggleDarkMode = () => {
-    setIsDark(prevIsDark => {
-      const newIsDark = !prevIsDark;
-      // Save to localStorage for persistence
-      localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
-      return newIsDark;
-    });
+  const toggleTheme = () => {
+    setIsDark(prev => !prev);
   };
 
-  const theme = {
-    bg: isDark
-      ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900'
-      : 'bg-gradient-to-br from-orange-100 via-pink-100 to-purple-100',
-    cardBg: isDark ? 'bg-gray-800/50' : 'bg-white',
-    textColor: isDark ? 'text-white' : 'text-gray-900',
-    subtextColor: isDark ? 'text-gray-300' : 'text-gray-600',
-    borderColor: isDark ? 'border-gray-700' : 'border-gray-200',
-  };
+  const themeMode: ThemeMode = isDark ? 'dark' : 'light';
 
-  return { theme, isDark, telegramUser, toggleDarkMode };
-}
+  return {
+    isDark,
+    themeMode,
+    toggleTheme,
+  };
+};
