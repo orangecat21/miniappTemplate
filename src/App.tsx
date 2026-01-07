@@ -2,7 +2,7 @@ import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useTelegram, useTheme } from './hooks';
 import { getThemeColors } from './utils/helpers';
 import { Navigation, ThemeToggle } from './components';
-import { HomePage, ShopPage, ProfilePage } from './pages';
+import { HomePage, ShopPage, ProfilePage, StatisticsPage } from './pages';
 
 export default function App() {
   const location = useLocation();
@@ -15,7 +15,8 @@ export default function App() {
   const getSelectedIndex = () => {
     const path = location.pathname;
     if (path === '/shop') return 1;
-    if (path === '/profile') return 2;
+    if (path === '/statistics') return 2;
+    if (path === '/profile') return 3;
     return 0; // '/' или '/home'
   };
 
@@ -40,6 +41,10 @@ export default function App() {
             <Route
               path="/shop"
               element={<ShopPage theme={theme} onItemSelect={handleShopItemSelect} />}
+            />
+            <Route
+              path="/statistics"
+              element={<StatisticsPage theme={theme} />}
             />
             <Route
               path="/profile"
