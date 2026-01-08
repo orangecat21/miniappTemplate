@@ -24,51 +24,30 @@ export const NavigationItem = ({ icon: Icon, label, path, isSelected, isDark }: 
     <a
       href={path}
       onClick={handleClick}
-      className="relative z-10 flex flex-col items-center justify-center w-20 h-16 rounded-full transition-all duration-300"
+      className="relative flex flex-col items-center justify-center w-16 h-14 rounded-2xl transition-all duration-300 group hover:bg-white/5"
     >
-      <div className="relative mb-0.5">
-        <Icon
-          className="w-6 h-6 transition-all duration-200"
-          style={{
-            color: isSelected ? 'transparent' : isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(100, 100, 100, 0.6)',
-            strokeWidth: 2
-          }}
-        />
+      <Icon
+        className={`w-6 h-6 transition-all duration-300 ${
+          isSelected
+            ? 'text-purple-600'
+            : isDark 
+              ? 'text-white/40' 
+              : 'text-gray-400'
+        }`}
+        strokeWidth={2}
+      />
 
-        <div
-          className="absolute inset-0 overflow-hidden transition-all duration-200 ease-out"
-          style={{
-            opacity: isSelected ? 1 : 0,
-          }}
-        >
-          <Icon
-            className="w-6 h-6 text-purple-900"
-            style={{ strokeWidth: 2 }}
-          />
-        </div>
-      </div>
-
-      <div className="relative">
-        <span
-          className="text-xs font-medium transition-all duration-200"
-          style={{
-            color: isSelected ? 'transparent' : isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(100, 100, 100, 0.6)'
-          }}
-        >
-          {label}
-        </span>
-
-        <div
-          className="absolute inset-0 overflow-hidden transition-all duration-200 ease-out"
-          style={{
-            opacity: isSelected ? 1 : 0,
-          }}
-        >
-          <span className="text-xs font-medium text-purple-900 whitespace-nowrap">
-            {label}
-          </span>
-        </div>
-      </div>
+      <span 
+        className={`text-[10px] transition-all duration-300 mt-1 ${
+          isSelected
+            ? 'text-purple-600 font-medium'
+            : isDark 
+              ? 'text-white/40 font-normal' 
+              : 'text-gray-400 font-normal'
+        }`}
+      >
+        {label}
+      </span>
     </a>
   );
 };

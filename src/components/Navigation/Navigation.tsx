@@ -9,21 +9,8 @@ interface NavigationProps {
 
 export const Navigation = ({ selectedIndex, isDark }: NavigationProps) => {
   return (
-    <div className={`fixed bottom-4 left-1/2 -translate-x-1/2 ${isDark ? 'bg-white/10' : 'bg-white/40'} backdrop-blur-md rounded-full p-1.5 shadow-2xl transition-all duration-700`}>
-      <div className="relative flex">
-        <div
-          className={`absolute ${isDark ? 'bg-white/30' : 'bg-white'} backdrop-blur-sm rounded-full transition-all duration-500 ease-out shadow-lg`}
-          style={{
-            left: `${selectedIndex * 80}px`,
-            top: '0',
-            bottom: '0',
-            width: '80px',
-            boxShadow: isDark
-              ? '0 8px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1)'
-              : '0 8px 20px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15)'
-          }}
-        />
-
+    <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 ${isDark ? 'bg-white/5' : 'bg-white/70'} backdrop-blur-xl rounded-3xl px-2 py-2 shadow-lg transition-all duration-700 border ${isDark ? 'border-white/10' : 'border-white/50'}`}>
+      <div className="relative flex items-center gap-1">
         {NAV_ITEMS.map((item, index) => (
           <NavigationItem
             key={index}
@@ -35,8 +22,10 @@ export const Navigation = ({ selectedIndex, isDark }: NavigationProps) => {
           />
         ))}
 
-        <div className="relative z-10 flex flex-col items-center justify-center w-20 h-16 rounded-full transition-all duration-300 cursor-pointer">
-          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-purple-900 shadow-lg">
+        <div className="mx-2 w-px h-8 bg-gradient-to-b from-transparent via-gray-300/40 to-transparent" />
+
+        <div className="relative z-10 flex flex-col items-center justify-center w-14 h-14 rounded-full transition-all duration-300 cursor-pointer">
+          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-purple-800 shadow-lg shadow-purple-900/20 hover:shadow-xl hover:shadow-purple-900/30 hover:scale-105 transition-all duration-300">
             <Plus className="w-6 h-6 text-white" strokeWidth={2} />
           </div>
         </div>
@@ -44,3 +33,4 @@ export const Navigation = ({ selectedIndex, isDark }: NavigationProps) => {
     </div>
   );
 };
+
