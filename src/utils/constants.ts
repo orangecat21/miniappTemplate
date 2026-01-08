@@ -1,9 +1,9 @@
-import { ShoppingBag, User, BarChart } from 'lucide-react';
+import { ShoppingBag, User, BarChart, CalendarDays } from 'lucide-react';
 
 export const NAV_ITEMS = [
-  { icon: User, label: 'Profile', path: '/profile' },
-  { icon: BarChart, label: 'Stats', path: '/statistics' },
-  { icon: ShoppingBag, label: 'Shop', path: '/shop' }
+  { icon: User, label: 'Профиль', path: '/profile' },
+  { icon: CalendarDays, label: 'Отчеты', path: '/statistics' },
+  { icon: BarChart, label: 'Сводка', path: '/shop' }
 ] as const;
 
 export const SHOP_ITEMS = [
