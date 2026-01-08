@@ -1,4 +1,5 @@
 import { Card } from '../../components/Card';
+import { ThemeToggle } from '../../components/ThemeToggle';
 import { PROFILE_STATS } from '../../utils/constants';
 import { formatUserName } from '../../utils/helpers';
 import { ThemeColors, TelegramUser } from '../../types';
@@ -7,9 +8,11 @@ interface ProfilePageProps {
   theme: ThemeColors;
   telegramUser: TelegramUser | null;
   telegramVersion?: string;
+  isDark: boolean;
+  toggleTheme: () => void;
 }
 
-export const ProfilePage = ({ theme, telegramUser, telegramVersion }: ProfilePageProps) => {
+export const ProfilePage = ({ theme, telegramUser, telegramVersion, isDark, toggleTheme }: ProfilePageProps) => {
   return (
     <Card theme={theme}>
       <div className="flex items-center gap-4 mb-5">
@@ -52,6 +55,10 @@ export const ProfilePage = ({ theme, telegramUser, telegramVersion }: ProfilePag
           <span className={`${theme.subtextColor} text-xs`}>Version</span>
           <span className={`${theme.textColor} text-sm font-medium`}>{telegramVersion || 'N/A'}</span>
         </div>
+      </div>
+
+      <div className="flex justify-end mb-5">
+        <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
       </div>
 
       <div className="grid grid-cols-3 gap-3">
