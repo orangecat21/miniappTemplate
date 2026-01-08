@@ -1,0 +1,1 @@
+export { MyRitual } from './MyRitual';

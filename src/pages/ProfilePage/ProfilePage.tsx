@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Card } from '../../components/Card';
 import { ThemeToggle } from '../../components/ThemeToggle';
+import { MyRitual } from '../../components/MyRitual';
 import { PROFILE_STATS } from '../../utils/constants';
 import { formatUserName } from '../../utils/helpers';
 import { ThemeColors, TelegramUser } from '../../types';
@@ -13,6 +15,7 @@ interface ProfilePageProps {
 }
 
 export const ProfilePage = ({ theme, telegramUser, telegramVersion, isDark, toggleTheme }: ProfilePageProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <Card theme={theme}>
       <div className="flex items-center gap-4 mb-5">
@@ -69,6 +72,26 @@ export const ProfilePage = ({ theme, telegramUser, telegramVersion, isDark, togg
           </div>
         ))}
       </div>
+
+      <div 
+        className={`mt-5 p-4 rounded-xl border ${theme.borderColor} ${theme.cardBg} hover:scale-[1.02] transition-transform cursor-pointer flex items-center gap-4`}
+        onClick={() => setIsModalOpen(true)}
+      >
+        <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
+          💎
+        </div>
+        <div className="flex-1">
+          <h3 className={`text-lg font-bold ${theme.textColor}`}>Мои ритуалы</h3>
+          <p className={`${theme.subtextColor} text-xs`}>Я хочу выполнять это каждый день</p>
+        </div>
+        <div className={`text-xl font-bold ${theme.textColor}`}>4 шт</div>
+      </div>
+
+      <MyRitual
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        theme={theme}
+      />
     </Card>
   );
 };
