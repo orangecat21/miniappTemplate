@@ -1,5 +1,6 @@
 import { NavigationItem } from './NavigationItem';
 import { NAV_ITEMS } from '../../utils/constants';
+import { Plus } from 'lucide-react';
 
 interface NavigationProps {
   selectedIndex: number;
@@ -33,6 +34,12 @@ export const Navigation = ({ selectedIndex, isDark }: NavigationProps) => {
             isDark={isDark}
           />
         ))}
+
+        <div className="relative z-10 flex flex-col items-center justify-center w-20 h-16 rounded-full transition-all duration-300 cursor-pointer">
+          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-purple-900 shadow-lg">
+            <Plus className="w-6 h-6 text-white" strokeWidth={2} />
+          </div>
+        </div>
       </div>
     </div>
   );

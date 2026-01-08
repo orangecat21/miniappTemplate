@@ -2,7 +2,7 @@ import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useTelegram, useTheme } from './hooks';
 import { getThemeColors } from './utils/helpers';
 import { Navigation, ThemeToggle } from './components';
-import { HomePage, ShopPage, ProfilePage, StatisticsPage } from './pages';
+import { ShopPage, ProfilePage, StatisticsPage } from './pages';
 
 export default function App() {
   const location = useLocation();
@@ -14,14 +14,13 @@ export default function App() {
   // Определяем текущий индекс на основе URL
   const getSelectedIndex = () => {
     const path = location.pathname;
-    if (path === '/shop') return 1;
-    if (path === '/statistics') return 2;
-    if (path === '/profile') return 3;
-    return 0; // '/' или '/home'
+    if (path === '/profile') return 0;
+    if (path === '/statistics') return 1;
+    if (path === '/shop') return 2;
+    return 0; // По умолчанию открываем profile
   };
 
   const selectedIndex = getSelectedIndex();
-
 
   const handleShopItemSelect = (itemName: string) => {
     showAlert(`${itemName} selected!`);
@@ -36,16 +35,7 @@ export default function App() {
       <div className="flex-1 flex items-center justify-center pb-20">
         <div className="w-full max-w-md">
           <Routes>
-            <Route path="/" element={<HomePage theme={theme} />} />
-            <Route path="/home" element={<Navigate to="/" replace />} />
-            <Route
-              path="/shop"
-              element={<ShopPage theme={theme} onItemSelect={handleShopItemSelect} />}
-            />
-            <Route
-              path="/statistics"
-              element={<StatisticsPage theme={theme} />}
-            />
+            <Route path="/" element={<Navigate to="/profile" replace />} />
             <Route
               path="/profile"
               element={
@@ -55,6 +45,14 @@ export default function App() {
                   telegramVersion={getVersion()}
                 />
               }
+            />
+            <Route
+              path="/statistics"
+              element={<StatisticsPage theme={theme} />}
+            />
+            <Route
+              path="/shop"
+              element={<ShopPage theme={theme} onItemSelect={handleShopItemSelect} />}
             />
           </Routes>
         </div>
