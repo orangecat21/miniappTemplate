@@ -75,7 +75,7 @@ export const MyRitual = ({ isOpen, onClose, theme }: MyRitualProps) => {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-start justify-center pt-10 p-4"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-4 px-4 pb-4"
       onClick={onClose}
     >
       <div 
@@ -83,27 +83,46 @@ export const MyRitual = ({ isOpen, onClose, theme }: MyRitualProps) => {
       />
       
       <div 
-        className={`relative w-full max-w-md ${theme.cardBg} rounded-2xl shadow-2xl p-6 max-h-[80vh] overflow-y-auto`}
+        className={`relative w-full max-w-md ${theme.cardBg} rounded-2xl shadow-2xl flex flex-col max-h-[calc(100vh-2rem)]`}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className={`absolute top-4 right-4 ${theme.subtextColor} hover:${theme.textColor} transition-colors`}
-        >
-          <X className="w-6 h-6" />
-        </button>
-
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center text-2xl">
-            💎
-          </div>
-          <div>
-            <h2 className={`text-2xl font-bold ${theme.textColor}`}>Мои ритуалы</h2>
-            <p className={`text-sm ${theme.subtextColor}`}>Редактирование ритуалов</p>
+        {/* Фиксированный хедер с кнопкой сохранения */}
+        <div className="flex-shrink-0 p-4 border-b border-gray-200/10">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center text-xl">
+                💎
+              </div>
+              <div>
+                <h2 className={`text-xl font-bold ${theme.textColor}`}>Мои ритуалы</h2>
+                <p className={`text-xs ${theme.subtextColor}`}>Редактирование ритуалов</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  if (validateFields()) {
+                    // TODO: Обработать отправку формы
+                    onClose();
+                  }
+                }}
+                className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-xl text-sm"
+              >
+                Сохранить
+              </button>
+              <button
+                onClick={onClose}
+                className={`p-2 ${theme.subtextColor} hover:${theme.textColor} transition-colors rounded-lg hover:bg-white/5`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="space-y-3">
+        {/* Скроллируемая область с полями */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {Array.from({ length: getVisibleFieldsCount() }).map((_, index) => {
             const visibleFieldsCount = getVisibleFieldsCount();
             const isLastVisible = index === visibleFieldsCount - 1;
@@ -130,23 +149,6 @@ export const MyRitual = ({ isOpen, onClose, theme }: MyRitualProps) => {
             );
           })}
 
-          {error && (
-            <div className="bg-red-500/20 border border-red-500 text-red-200 px-4 py-3 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          <button
-            onClick={() => {
-              if (validateFields()) {
-                // TODO: Обработать отправку формы
-                onClose();
-              }
-            }}
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-xl"
-          >
-            Сохранить
-          </button>
         </div>
       </div>
     </div>
