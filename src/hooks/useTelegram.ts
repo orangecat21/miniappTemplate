@@ -20,7 +20,27 @@ export const useTelegram = () => {
 
         if (tg) {
           tg.ready();
+          
+          // Разворачиваем на весь экран с задержкой для надежности
           tg.expand();
+          
+          // Дополнительное расширение для мобильных устройств
+          setTimeout(() => {
+            if (tg) {
+              tg.expand();
+              // Устанавливаем высоту на весь экран
+              if (tg.requestFullscreen) {
+                tg.requestFullscreen();
+              }
+            }
+          }, 100);
+
+          // Периодическое расширение для надежности на мобильных устройствах
+          const expandInterval = setInterval(() => {
+            if (tg) {
+              tg.expand();
+            }
+          }, 1000);
 
           const user = tg.initDataUnsafe?.user;
           if (user) {
@@ -33,6 +53,9 @@ export const useTelegram = () => {
           }
 
           setIsInitialized(true);
+
+          // Очищаем интервал при размонтировании
+          return () => clearInterval(expandInterval);
         } else {
           setIsInitialized(true);
         }
