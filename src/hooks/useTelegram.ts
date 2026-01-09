@@ -16,13 +16,13 @@ export const useTelegram = () => {
   useEffect(() => {
     const initTelegram = async () => {
       try {
-        const WebApp = window.Telegram?.WebApp;
+        const tg = window.Telegram?.WebApp;
 
-        if (WebApp) {
-          WebApp.ready();
-          WebApp.expand();
+        if (tg) {
+          tg.ready();
+          tg.expand();
 
-          const user = WebApp.initDataUnsafe?.user;
+          const user = tg.initDataUnsafe?.user;
           if (user) {
             setTelegramUser({
               firstName: user.first_name,
@@ -68,11 +68,16 @@ export const useTelegram = () => {
     return window.Telegram?.WebApp?.version;
   };
 
+  const isTelegram = () => {
+    return !!window.Telegram?.WebApp?.initDataUnsafe?.user;
+  };
+
   return {
     telegramUser,
     isInitialized,
     showAlert,
     hapticFeedback,
     getVersion,
+    isTelegram,
   };
 };

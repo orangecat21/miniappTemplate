@@ -7,11 +7,16 @@ import { ShopPage, ProfilePage, StatisticsPage } from './pages';
 
 export default function App() {
   const location = useLocation();
-  const { telegramUser, showAlert, hapticFeedback, getVersion } = useTelegram();
+  const { telegramUser, showAlert, hapticFeedback, getVersion, isTelegram } = useTelegram();
   const { isDark, toggleTheme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const theme = getThemeColors(isDark);
+
+  // Проверяем, что приложение открыто в Telegram, а не в браузере
+  if (!isTelegram()) {
+    console.warn('Приложение открыто в браузере, а не в Telegram');
+  }
 
   // Определяем текущий индекс на основе URL
   const getSelectedIndex = () => {
