@@ -12,6 +12,8 @@ declare global {
 export const useTelegram = () => {
   const [telegramUser, setTelegramUser] = useState<TelegramUser | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
+  const [stableHeight, setStableHeight] = useState<number | null>(null);
 
   useEffect(() => {
     const initTelegram = async () => {
@@ -21,26 +23,28 @@ export const useTelegram = () => {
         if (tg) {
           tg.ready();
           
-          // Разворачиваем на весь экран с задержкой для надежности
+          // Разворачиваем на весь экран
           tg.expand();
           
-          // Дополнительное расширение для мобильных устройств
-          setTimeout(() => {
-            if (tg) {
-              tg.expand();
-              // Устанавливаем высоту на весь экран
-              if (tg.requestFullscreen) {
-                tg.requestFullscreen();
-              }
-            }
-          }, 100);
+          // Устанавливаем начальную высоту viewport
+          setViewportHeight(tg.viewportHeight);
+          setStableHeight(tg.viewportStableHeight);
 
-          // Периодическое расширение для надежности на мобильных устройствах
-          const expandInterval = setInterval(() => {
-            if (tg) {
+          // Обработчик изменения viewport (появление/скрытие клавиатуры)
+          const handleViewportChanged = (event: { isStateStable: boolean }) => {
+            const currentHeight = tg.viewportHeight;
+            const currentStableHeight = tg.viewportStableHeight;
+            
+            setViewportHeight(currentHeight);
+            setStableHeight(currentStableHeight);
+            
+            // Если viewport стабилен, снова расширяем
+            if (event.isStateStable) {
               tg.expand();
             }
-          }, 1000);
+          };
+
+          tg.onEvent('viewportChanged', handleViewportChanged);
 
           const user = tg.initDataUnsafe?.user;
           if (user) {
@@ -54,8 +58,10 @@ export const useTelegram = () => {
 
           setIsInitialized(true);
 
-          // Очищаем интервал при размонтировании
-          return () => clearInterval(expandInterval);
+          // Очищаем события при размонтировании
+          return () => {
+            tg.offEvent('viewportChanged', handleViewportChanged);
+          };
         } else {
           setIsInitialized(true);
         }
@@ -95,6 +101,14 @@ export const useTelegram = () => {
     return !!window.Telegram?.WebApp?.initDataUnsafe?.user;
   };
 
+  const disableScroll = () => {
+    window.Telegram?.WebApp?.disableScrolling();
+  };
+
+  const enableScroll = () => {
+    window.Telegram?.WebApp?.enableScrolling();
+  };
+
   return {
     telegramUser,
     isInitialized,
@@ -102,5 +116,9 @@ export const useTelegram = () => {
     hapticFeedback,
     getVersion,
     isTelegram,
+    viewportHeight,
+    stableHeight,
+    disableScroll,
+    enableScroll,
   };
 };

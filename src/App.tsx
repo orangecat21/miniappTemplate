@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useTelegram, useTheme } from './hooks';
 import { getThemeColors } from './utils/helpers';
@@ -7,11 +7,24 @@ import { ShopPage, ProfilePage, StatisticsPage } from './pages';
 
 export default function App() {
   const location = useLocation();
-  const { telegramUser, showAlert, hapticFeedback, getVersion, isTelegram } = useTelegram();
+  const { telegramUser, showAlert, hapticFeedback, getVersion, isTelegram, viewportHeight, stableHeight } = useTelegram();
   const { isDark, toggleTheme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const theme = getThemeColors(isDark);
+
+  // Используем stableHeight для контейнера - это высота без клавиатуры
+  const containerHeight = stableHeight || viewportHeight || '100vh';
+
+  // Применяем высоту viewport из Telegram для предотвращения смещения при клавиатуре
+  useEffect(() => {
+    if (viewportHeight) {
+      document.documentElement.style.setProperty('--tg-viewport-height', `${viewportHeight}px`);
+    }
+    if (stableHeight) {
+      document.documentElement.style.setProperty('--tg-stable-height', `${stableHeight}px`);
+    }
+  }, [viewportHeight, stableHeight]);
 
   // Проверяем, что приложение открыто в Telegram, а не в браузере
   if (!isTelegram()) {
@@ -34,8 +47,15 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen ${theme.bg} transition-all duration-700 flex flex-col p-4`}>
-      <div className="flex-1 flex items-center justify-center pb-20">
+    <div 
+      className={`${theme.bg} transition-all duration-700 flex flex-col p-4`}
+      style={{ 
+        height: typeof containerHeight === 'number' ? `${containerHeight}px` : containerHeight,
+        minHeight: '100vh',
+        overflow: 'hidden'
+      }}
+    >
+      <div className="flex-1 flex items-center justify-center" style={{ overflow: 'auto' }}>
         <div className="w-full max-w-md">
           <Routes>
             <Route path="/" element={<Navigate to="/profile" replace />} />
