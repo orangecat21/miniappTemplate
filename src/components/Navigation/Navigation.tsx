@@ -5,9 +5,14 @@ import { Plus } from 'lucide-react';
 interface NavigationProps {
   selectedIndex: number;
   isDark: boolean;
+  isModalOpen?: boolean;
 }
 
-export const Navigation = ({ selectedIndex, isDark }: NavigationProps) => {
+export const Navigation = ({ selectedIndex, isDark, isModalOpen = false }: NavigationProps) => {
+  if (isModalOpen) {
+    return null;
+  }
+
   return (
     <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 ${isDark ? 'bg-white/5' : 'bg-white/70'} backdrop-blur-xl rounded-3xl px-2 py-2 shadow-lg transition-all duration-700 border ${isDark ? 'border-white/10' : 'border-white/50'}`}>
       <div className="relative flex items-center gap-1">

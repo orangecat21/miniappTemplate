@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Card } from '../../components/Card';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { MyRitual } from '../../components/MyRitual';
@@ -12,10 +11,11 @@ interface ProfilePageProps {
   telegramVersion?: string;
   isDark: boolean;
   toggleTheme: () => void;
+  isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
 }
 
-export const ProfilePage = ({ theme, telegramUser, telegramVersion, isDark, toggleTheme }: ProfilePageProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export const ProfilePage = ({ theme, telegramUser, telegramVersion, isDark, toggleTheme, isModalOpen, setIsModalOpen }: ProfilePageProps) => {
   return (
     <Card theme={theme}>
       <div className="flex items-center gap-4 mb-5">

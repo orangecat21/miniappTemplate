@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useTelegram, useTheme } from './hooks';
 import { getThemeColors } from './utils/helpers';
@@ -8,6 +9,7 @@ export default function App() {
   const location = useLocation();
   const { telegramUser, showAlert, hapticFeedback, getVersion } = useTelegram();
   const { isDark, toggleTheme } = useTheme();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const theme = getThemeColors(isDark);
 
@@ -41,6 +43,8 @@ export default function App() {
                   telegramVersion={getVersion()}
                   isDark={isDark}
                   toggleTheme={toggleTheme}
+                  isModalOpen={isModalOpen}
+                  setIsModalOpen={setIsModalOpen}
                 />
               }
             />
@@ -59,6 +63,7 @@ export default function App() {
       <Navigation
         selectedIndex={selectedIndex}
         isDark={isDark}
+        isModalOpen={isModalOpen}
       />
     </div>
   );
